@@ -8,7 +8,6 @@
 }
 
 body{
-    overflow: hidden;
     background-color: rgb(21, 123, 226);
 }
 
@@ -112,6 +111,10 @@ li{
     display: flex;
 }
 
+.task label p.checked{
+    text-decoration: line-through;
+}
+
 .task label input{
     margin-top: 6px;
     margin-right: 12px;
@@ -119,14 +122,16 @@ li{
 
 .task .settings{
     cursor: pointer;
+    position: relative;
 }
 
 .settings .task-menu{
     transform: scale(0);
     transform-origin: top right;
     transition: transform 0.2s ease;
-    right: 592px;
-    top:316px;
+    width: 150px;
+    right: -2px;
+    top: 10px;
     position: absolute;
     padding: 5px 0;
     border-radius: 5px;
