@@ -20,8 +20,8 @@ function showTodo(){
                          <div class="settings">
                             <i onclick="showMenu(this)" class="uil uil-ellipsis-h"></i>
                             <ul class="task-menu">
-                                <li><i class="uil uil-pen"></i>Edit</li>
-                                <li><i class="uil uil-trash"></i>Delete</li>
+                                <li onclick="editTask(${id},'${todo.name}')"><i class="uil uil-pen"></i>Edit</li>
+                                <li onclick="deleteTask(${id})"><i class="uil uil-trash"></i>Delete</li>
                             </ul>
                         </div>
                     </li>`;
@@ -30,11 +30,30 @@ function showTodo(){
     taskBox.innerHTML = li;
 }
 
+showTodo();
+
 function showMenu(selectedTask){
-    console.log(selectedTask)
+    let taskMenu = selectedTask.parentElement.lastElementChild;
+    taskMenu.classList.add("show");
+
+    document.addEventListener("click", e => {
+        if(e.target.tagName != "I" || e.target != selectedTask){
+            taskMenu.classList.remove("show");
+        }
+    });
 }
 
-showTodo();
+function editTask(taskId, taskName){
+    
+}
+
+function deleteTask(deleteId){
+    todos.splice(deleteId,1);
+    localStorage.setItem("todo-list", JSON.stringify(todos));
+    showTodo();
+}
+
+
 
 function updateStatus(selectedTask){
     let taskName = selectedTask.parentElement.lastElementChild;
