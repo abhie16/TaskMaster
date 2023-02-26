@@ -1,4 +1,6 @@
 let userInput = document.querySelector(".task-input input");
+filters = document.querySelectorAll(".filters span"),
+clearAll = document.querySelector(".btn-clear")
 taskBox = document.querySelector(".task-box");
 
 let editId;
@@ -7,15 +9,24 @@ let isEditedTask=false;
 // getting localStorage todo-list
 let todos = JSON.parse(localStorage.getItem("todo-list"));
 
-function showTodo(){
+filters.forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.querySelector("span.active").classList.remove("active");
+        btn.classList.add("active");
+        showTodo(btn.id);
+    });
+});
+
+
+function showTodo(filter){
     let li = "";
 
     if(todos){
         todos.forEach((todo, id) => {
 
             let isCompleted = todo.status == "completed" ? "checked" : "";
-
-            li += `<li class="task">
+            if(filter == todo.status || filter == "all"){
+                li += `<li class="task">
                         <label for="${id}">
                             <input onclick="updateStatus(this)" type="checkbox" name="" id="${id}" ${isCompleted}>
                             <P class="${isCompleted}">${todo.name}</P>
@@ -28,12 +39,13 @@ function showTodo(){
                             </ul>
                         </div>
                     </li>`;
+            }
         });
     }
-    taskBox.innerHTML = li;
+    taskBox.innerHTML = li || `You don't have any task here`;
 }
 
-showTodo();
+showTodo("all");
 
 function showMenu(selectedTask){
     let taskMenu = selectedTask.parentElement.lastElementChild;
@@ -55,10 +67,14 @@ function editTask(taskId, taskName){
 function deleteTask(deleteId){
     todos.splice(deleteId,1);
     localStorage.setItem("todo-list", JSON.stringify(todos));
-    showTodo();
+    showTodo("all");
 }
 
-
+clearAll.addEventListener("click", () =>{
+    todos.splice(0 , todos.length);
+    localStorage.setItem("todo-list", JSON.stringify(todos));
+    showTodo("all");
+});
 
 function updateStatus(selectedTask){
     let taskName = selectedTask.parentElement.lastElementChild;
@@ -87,10 +103,10 @@ userInput.addEventListener("keyup", e => {
         else{
             isEditedTask = false;
             todos[editId].name = task;
-        }
+        } 
 
        userInput.value = ""; 
         localStorage.setItem("todo-list", JSON.stringify(todos));
-       showTodo();
+       showTodo("all");
     }
 })
